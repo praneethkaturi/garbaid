@@ -31,6 +31,18 @@ const schema = new mongoose.Schema({
                 throw new Error("Password cannot contain password")
             }
         }        
+    },
+
+    'firstName': {
+        type: String,
+        required: true,
+        trim: true,
+    },
+
+    'lastName': {
+        type: String,
+        required: true,
+        trim: true
     }
 })
 
@@ -40,7 +52,12 @@ schema.pre('save', async function (next){
     if(user.isModified('password')){
         user.password = await bcrypt.hash(user.password, 8)
     }
-
+    if(user.isModified('firstName')){
+        user.firstName = user.firstName.charAt(0).toUpperCase() + user.firstName.slice(1).toLowerCase()
+    }
+    if(user.isModified('lastName')){
+        user.lastName = user.lastName.charAt(0).toUpperCase() + user.lastName.slice(1).toLowerCase()
+    }
     next()
 })
 
