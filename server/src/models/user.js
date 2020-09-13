@@ -1,19 +1,16 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 const validator = require('validator')
+const jwt = require('jsonwebtoken')
 
 const schema = new mongoose.Schema({
-    'username':{
-        type: String,
-        required: true,
-        trim: true
-    },
-
+  
     'email': {
         type: String,
         required: true,
         trim: true,
         lowercase: true,
+        unique:true,
         validate(value){
             if(!validator.isEmail(value)){
                 throw new Error('Please provide a valid email address')
@@ -33,18 +30,57 @@ const schema = new mongoose.Schema({
         }        
     },
 
-    'firstName': {
+    'firstname': {
         type: String,
         required: true,
         trim: true,
     },
 
-    'lastName': {
+    'lastname': {
         type: String,
         required: true,
         trim: true
-    }
+    },
+
+    'tokens': [{
+        'token': {
+            type: String,
+            required: true
+        }
+    }]
 })
+
+// method to generate authentication token, this method
+// is for an instance of the user model
+
+schema.methods.genAuthToken = async function(){
+    const user = this
+    const token = await jwt.sign({email: user.email}, "userAuth")
+
+    user.tokens = user.tokens.concat({ token })
+    await user.save()
+    return token
+}
+
+
+// method to verify the credentials provided, this method
+// is for the user model and not for an instance of it
+
+schema.statics.findByCredentials = async (email, password) => {
+    const user = await User.findOne({email})
+
+    if(!user){
+        throw new Error('Unable to login')
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password)
+
+    if(!isMatch){
+        throw new Error('Unable to login')
+    }
+
+    return user
+}
 
 schema.pre('save', async function (next){
     const user = this
@@ -52,11 +88,11 @@ schema.pre('save', async function (next){
     if(user.isModified('password')){
         user.password = await bcrypt.hash(user.password, 8)
     }
-    if(user.isModified('firstName')){
-        user.firstName = user.firstName.charAt(0).toUpperCase() + user.firstName.slice(1).toLowerCase()
+    if(user.isModified('firstname')){
+        user.firstname = user.firstname.charAt(0).toUpperCase() + user.firstname.slice(1).toLowerCase()
     }
-    if(user.isModified('lastName')){
-        user.lastName = user.lastName.charAt(0).toUpperCase() + user.lastName.slice(1).toLowerCase()
+    if(user.isModified('lastname')){
+        user.lastname = user.lastname.charAt(0).toUpperCase() + user.lastname.slice(1).toLowerCase()
     }
     next()
 })
