@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 const validator = require('validator')
 const jwt = require('jsonwebtoken')
+const config = require('../middleware/config')
 
 const schema = new mongoose.Schema({
   
@@ -55,7 +56,7 @@ const schema = new mongoose.Schema({
 
 schema.methods.genAuthToken = async function(){
     const user = this
-    const token = await jwt.sign({email: user.email}, "userAuth")
+    const token = await jwt.sign({_id: user._id}, "userAuth")
 
     user.tokens = user.tokens.concat({ token })
     await user.save()

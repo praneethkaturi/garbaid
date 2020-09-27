@@ -1,4 +1,5 @@
 const express = require('express')
+const auth = require('../middleware/auth')
 const User = require('../models/user')
 
 const router = new express.Router()
@@ -12,28 +13,23 @@ router.get('/users', async (req,res) => {
     }
 })
 
-router.get('/users/:id', async (req, res) => {
-    const user = await User.findOne({'email' : req.params.id})
-
-    if(!user){
-        res.status(400).send({'Error' : 'Cannot find user'})
-    }
-    
-    res.status(200).send(user)
-})
 
 router.post('/users/signup', async (req, res) => {
     const data = req.body
     const user = new User(data)
 
-    const token = await user.genAuthToken()
-
+    
     try{
         await user.save()
+        const token = await user.genAuthToken()
         res.status(200).send({user, token})
     } catch(error){
         res.status(400).send(error)
     }
+})
+
+router.get('/users/me', auth, (req, res) => {
+    res.status(200).send(req.user)
 })
 
 module.exports = router
