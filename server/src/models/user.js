@@ -63,6 +63,14 @@ schema.methods.genAuthToken = async function(){
     return token
 }
 
+//toJSON method to ignore password and tokens in the response
+schema.methods.toJSON = function (){
+    const user = this
+    const temp = user.toObject()
+    delete temp.password
+    delete temp.tokens
+    return temp
+}
 
 // method to verify the credentials provided, this method
 // is for the user model and not for an instance of it

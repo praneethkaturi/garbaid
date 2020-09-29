@@ -1,4 +1,5 @@
 const express = require('express')
+const bcrypt = require('bcryptjs')
 const auth = require('../middleware/auth')
 const User = require('../models/user')
 
@@ -24,7 +25,20 @@ router.post('/users/signup', async (req, res) => {
         const token = await user.genAuthToken()
         res.status(200).send({user, token})
     } catch(error){
-        res.status(400).send(error)
+        res.status(400).send()
+    }
+})
+
+router.post('/users/login', async (req, res) => {
+    try{
+        const user = await User.findByCredentials(req.body.email, req.body.password)
+        const token = await user.genAuthToken()
+
+        res.status(200).send({user, token})
+    }
+
+    catch(error){
+        res.status(400).send()
     }
 })
 
