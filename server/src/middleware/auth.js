@@ -8,7 +8,7 @@ const auth = async (req, res, next) => {
     const user = await User.findOne({_id: decoded._id, 'tokens.token': token})
 
     if(!user){
-        return res.status(401).send()
+        return res.status(401).send({"Error": "Unable to complete operation"})
     }
 
     req.user = user

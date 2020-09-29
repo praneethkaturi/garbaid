@@ -14,6 +14,9 @@ router.get('/users', async (req,res) => {
     }
 })
 
+router.get('/users/me', auth, (req, res) => {
+    res.status(200).send(req.user)
+})
 
 router.post('/users/signup', async (req, res) => {
     const data = req.body
@@ -42,8 +45,27 @@ router.post('/users/login', async (req, res) => {
     }
 })
 
-router.get('/users/me', auth, (req, res) => {
-    res.status(200).send(req.user)
+router.post('/users/logout', auth, async (req, res) => {
+    try{
+        req.user.tokens = req.user.tokens.filter((token) => {
+            return token.token != req.token
+        })
+
+        await req.user.save()
+    }
+
+    catch (error){
+        res.status(400).send()
+    }
+
+    res.status(200).send()
 })
+
+router.patch('users/update', auth, async (req, res) => {
+    const allowed_updates = ['email', 'password']
+
+})
+
+
 
 module.exports = router
