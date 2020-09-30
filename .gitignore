@@ -2,4 +2,4 @@
 /server/src/db/config.js
 /server/src/middleware/config.js
 /server/venv
-/model/utils/weights
+/model/utils/weights/untrained.h5
