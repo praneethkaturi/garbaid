@@ -3,3 +3,4 @@
 /server/src/middleware/config.js
 /server/venv
 /model/utils/weights
+/.vscode
