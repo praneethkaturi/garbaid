@@ -1,6 +1,6 @@
-/server/node_modules
-/server/src/db/config.js
-/server/src/middleware/config.js
+/server/node-app/node_modules
+/server/node-app/src/db/config.js
+/server/node-app/src/middleware/config.js
 /server/venv
 /model/utils/weights
 /.vscode
