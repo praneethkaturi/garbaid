@@ -50,6 +50,13 @@ const schema = new mongoose.Schema({
         }
     }]
 })
+// virtual property to link complaint with a user
+
+schema.virtual('complaints', {
+    ref: 'Complaint',
+    localField: '_id',
+    foriegnField: 'owner'
+})
 
 // method to generate authentication token, this method
 // is for an instance of the user model
