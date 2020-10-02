@@ -55,7 +55,7 @@ const schema = new mongoose.Schema({
 schema.virtual('complaints', {
     ref: 'Complaint',
     localField: '_id',
-    foriegnField: 'owner'
+    foreignField: 'owner'
 })
 
 // method to generate authentication token, this method
