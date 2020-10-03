@@ -17,9 +17,9 @@ def toRGB(image):
 
 @app.route('/')
 def home():
-    return "Hello world"
+    return jsonify({"res": "Hello world"})
 
-@app.route('/predict', methods = ['POST'])
+@app.route('/predict', methods = ['GET'])
 def predict_class():
     IMAGE_RESIZE = 224
     req_data = request.get_json()
@@ -37,7 +37,7 @@ def predict_class():
     ##pred = model.predict(image_resized) 
     ##class_value = np.argmax(pred, axis = 0)
 
-    return jsonify({"class": 0})
+    return jsonify({"class": "0"})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')    
+    app.run()    
