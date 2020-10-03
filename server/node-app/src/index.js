@@ -5,6 +5,8 @@ const complaint_router = require('./routers/complaint')
 const app = express()
 require('./db/connection.js')
 
+app.use(express.json({limit: '10mb'}));
+
 app.use(express.json())
 app.use(user_router)
 app.use(complaint_router)
