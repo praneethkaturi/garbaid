@@ -17,7 +17,7 @@ router.post('/complaints', auth, async (req, res) => {
         const response = await axios({
             method: 'get',
             url: '/predict',
-            baseURL: 'http://localhost:5000',
+            baseURL: 'http://flask-app:5000', //'http://flask-app:5000'
             data: {
                 ...req.body
             }
