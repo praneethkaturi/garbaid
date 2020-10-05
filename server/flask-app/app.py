@@ -37,7 +37,7 @@ def predict_class():
     ##pred = model.predict(image_resized) 
     ##class_value = np.argmax(pred, axis = 0)
 
-    return jsonify({"class": "0"})
+    return jsonify({"class": "1"})
 
 if __name__ == '__main__':
-    app.run(host = '0.0.0.0')    
+    app.run(host='0.0.0.0')    

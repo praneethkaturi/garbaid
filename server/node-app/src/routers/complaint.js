@@ -13,7 +13,6 @@ router.post('/complaints', auth, async (req, res) => {
 
     // Hitting the model end point
     try{
-        //console.log(complaint.image);
         const response = await axios({
             method: 'get',
             url: '/predict',
@@ -22,19 +21,18 @@ router.post('/complaints', auth, async (req, res) => {
                 ...req.body
             }
         })
-        res.status(200).send(response.data)
+
+        if(parseInt(response.data.class) == 0)
+            return res.status(200).send({"class": 0})
+        else{
+            complaint.rating = response.data.class
+            await complaint.save()
+            return res.status(200).send({"class": complaint.rating})
+        }
 
     } catch(error){
         res.status(400).send({"error": "Could not connect to flask-app"})
     }
-
-    // try{
-    //     await complaint.save()
-    //     return res.status(200).send(complaint)
-    // } catch(error) {
-    //     res.status(400).send(error)
-    // }
-
 })
 
 router.get('/complaints', auth, async (req, res) => {
