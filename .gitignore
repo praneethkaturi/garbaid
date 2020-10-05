@@ -1,6 +1,5 @@
 /server/node-app/node_modules
-/server/node-app/src/db/config.js
-/server/node-app/src/middleware/config.js
+/server/docker-compose.yml
 /server/venv
 /model/utils/weights
 /.vscode
