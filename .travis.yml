@@ -1,0 +1,16 @@
+sudo: required
+services:
+    - docker
+    
+script:
+    - docker build -t praneethkat/flask-app -f ./server/flask-app/Dockerfile.dev ./server/flask-app
+    - docker build -t praneethkat/garbaid-node -f ./server/node-app/Dockerfile.dev ./server/node-app
+
+after_success:
+    # Log in to docker CLI
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+
+    # After logging in, push to docker-hub
+    - docker push praneethkat/flask-app
+    - docker push praneethkat/node-app
+        
