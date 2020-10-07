@@ -1,0 +1,34 @@
+{
+    "AWSEBDockerrunVersion": 2,
+    "containerDefinitions": [
+        {
+            "name": "garbaid-flask",
+            "image": "praneethkat/garbaid-flask",
+            "hostname": "flask-app",
+            "essential": false,
+            "portMappings": [
+                {
+                    "hostPort": 5000,
+                    "containerPort": 5000
+                }
+            ],
+            "memory": 256
+        },
+
+        {
+            "name": "garbaid-node",
+            "image": "praneethkat/garbaid-node",
+            "hostname": "node-app",
+            "essential": true,
+            "portMappings": [
+                {
+                    "hostPort": 8000,
+                    "containerPort": 8000
+                }
+            ],
+
+            "links": ["garbaid-flask"],
+            "memory": 256
+        }
+    ]
+}
