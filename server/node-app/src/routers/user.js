@@ -52,9 +52,29 @@ router.post('/users/logout', auth, async (req, res) => {
     res.status(200).send()
 })
 
-router.patch('users/update', auth, async (req, res) => {
+router.patch('/users/update', auth, async (req, res) => {
     const allowed_updates = ['email', 'password']
+    const keys = Object.keys(req.body)
 
+    const is_allowed = keys.every((key) => {
+        return allowed_updates.includes(key)
+    })
+
+    if(!is_allowed){
+        return res.status(400).send()
+    }
+
+    try{
+        req.user = await User.findOneAndUpdate({_id: req.user._id}, req.body, {
+            new:true
+        })
+        await req.user.save()
+
+        res.status(200).send(req.user)
+        
+    } catch(e){
+        return res.status(400).send({"error": "Could not update, try again later"})
+    }
 })
 
 
